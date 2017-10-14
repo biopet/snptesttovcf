@@ -2,4 +2,7 @@ package nl.biopet.tools.snptesttovcf
 
 import java.io.File
 
-case class Args(inputFile: File = null)
+case class Args(inputInfo: File = null,
+                outputVcf: File = null,
+                referenceFasta: File = null,
+                contig: String = null)
