@@ -6,5 +6,5 @@ or install via your distribution's package manager.
 Download the latest version of <tool> [here](https://github.com/biopet/INSERTTOOLNAMEHERE/releases/). 
 To generate the usage run:
 ```bash
-java -jar <tool>-version.jar --help
+java -jar snptesttovcf-version.jar --help
 ```
