@@ -6,7 +6,7 @@ import java.util
 import htsjdk.variant.variantcontext.{Allele, VariantContextBuilder}
 import htsjdk.variant.variantcontext.writer.{AsyncVariantContextWriter, Options, VariantContextWriterBuilder}
 import htsjdk.variant.vcf.{VCFHeader, VCFHeaderLine, VCFHeaderLineType, VCFInfoHeaderLine}
-import nl.biopet.utils.ngs.FastaUtils
+import nl.biopet.utils.ngs.fasta
 import nl.biopet.utils.tool.ToolCommand
 
 import scala.collection.JavaConversions._
@@ -35,7 +35,7 @@ object SnptestToVcf extends ToolCommand {
 
   def writeEmptyVcf(outputVcf: File, referenceFasta: File): Unit = {
     val vcfHeader = new VCFHeader()
-    vcfHeader.setSequenceDictionary(FastaUtils.getCachedDict(referenceFasta))
+    vcfHeader.setSequenceDictionary(fasta.getCachedDict(referenceFasta))
     val writer = new VariantContextWriterBuilder()
       .setOutputFile(outputVcf)
       .setReferenceDictionary(vcfHeader.getSequenceDictionary)
@@ -58,11 +58,11 @@ object SnptestToVcf extends ToolCommand {
          if key != "alleleA")
       metaLines.add(new VCFInfoHeaderLine(s"ST_$key", 1, VCFHeaderLineType.String, ""))
 
-    require(FastaUtils.getCachedDict(cmdArgs.referenceFasta).getSequence(cmdArgs.contig) != null,
+    require(fasta.getCachedDict(cmdArgs.referenceFasta).getSequence(cmdArgs.contig) != null,
       s"contig '${cmdArgs.contig}' not found on reference")
 
     val vcfHeader = new VCFHeader(metaLines)
-    vcfHeader.setSequenceDictionary(FastaUtils.getCachedDict(cmdArgs.referenceFasta))
+    vcfHeader.setSequenceDictionary(fasta.getCachedDict(cmdArgs.referenceFasta))
     val writer = new AsyncVariantContextWriter(
       new VariantContextWriterBuilder()
         .setOutputFile(cmdArgs.outputVcf)
