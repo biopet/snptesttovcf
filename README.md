@@ -5,6 +5,7 @@ dedicate data analysis task or added as part of [BIOPET pipelines](http://biopet
 
 #  About this tool
 Converts a SNPTEST file to VCF.
+
 #  Documentation
 For documentation and manuals visit the [readthedocs page](http://biopet-snptesttovcf.readthedocs.io/en/latest/).
 
