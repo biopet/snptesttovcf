@@ -2,10 +2,10 @@ package nl.biopet.tools.snptesttovcf
 
 import java.io.File
 
-import nl.biopet.test.BiopetTest
+import nl.biopet.utils.test.tools.ToolTest
 import org.testng.annotations.Test
 
-class SnptestToVcfTest extends BiopetTest {
+class SnptestToVcfTest extends ToolTest[Args] {
   @Test
   def testNoArgs(): Unit = {
     intercept[IllegalArgumentException] {
