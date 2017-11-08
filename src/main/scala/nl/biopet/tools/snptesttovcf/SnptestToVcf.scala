@@ -4,8 +4,17 @@ import java.io.File
 import java.util
 
 import htsjdk.variant.variantcontext.{Allele, VariantContextBuilder}
-import htsjdk.variant.variantcontext.writer.{AsyncVariantContextWriter, Options, VariantContextWriterBuilder}
-import htsjdk.variant.vcf.{VCFHeader, VCFHeaderLine, VCFHeaderLineType, VCFInfoHeaderLine}
+import htsjdk.variant.variantcontext.writer.{
+  AsyncVariantContextWriter,
+  Options,
+  VariantContextWriterBuilder
+}
+import htsjdk.variant.vcf.{
+  VCFHeader,
+  VCFHeaderLine,
+  VCFHeaderLineType,
+  VCFInfoHeaderLine
+}
 import nl.biopet.utils.ngs.fasta
 import nl.biopet.utils.tool.ToolCommand
 
@@ -45,7 +54,9 @@ object SnptestToVcf extends ToolCommand[Args] {
     writer.close()
   }
 
-  def parseLines(header: String, lineIt: Iterator[String], cmdArgs: Args): Unit = {
+  def parseLines(header: String,
+                 lineIt: Iterator[String],
+                 cmdArgs: Args): Unit = {
     val headerKeys = header.split(" ")
     val headerMap = headerKeys.zipWithIndex.toMap
     require(headerKeys.size == headerMap.size, "Duplicates header keys found")
@@ -56,13 +67,17 @@ object SnptestToVcf extends ToolCommand[Args] {
          if key != "alleleA"
          if key != "alleleB"
          if key != "alleleA")
-      metaLines.add(new VCFInfoHeaderLine(s"ST_$key", 1, VCFHeaderLineType.String, ""))
+      metaLines.add(
+        new VCFInfoHeaderLine(s"ST_$key", 1, VCFHeaderLineType.String, ""))
 
-    require(fasta.getCachedDict(cmdArgs.referenceFasta).getSequence(cmdArgs.contig) != null,
-      s"contig '${cmdArgs.contig}' not found on reference")
+    require(fasta
+              .getCachedDict(cmdArgs.referenceFasta)
+              .getSequence(cmdArgs.contig) != null,
+            s"contig '${cmdArgs.contig}' not found on reference")
 
     val vcfHeader = new VCFHeader(metaLines)
-    vcfHeader.setSequenceDictionary(fasta.getCachedDict(cmdArgs.referenceFasta))
+    vcfHeader.setSequenceDictionary(
+      fasta.getCachedDict(cmdArgs.referenceFasta))
     val writer = new AsyncVariantContextWriter(
       new VariantContextWriterBuilder()
         .setOutputFile(cmdArgs.outputVcf)
@@ -82,9 +97,9 @@ object SnptestToVcf extends ToolCommand[Args] {
     for (line <- lineIt if !line.startsWith("#")) {
       val values = line.split(" ")
       require(values.size == headerKeys.size,
-        "Number of values are not the same as number of header keys")
+              "Number of values are not the same as number of header keys")
       val alleles = List(Allele.create(values(headerMap("alleleA")), true),
-        Allele.create(values(headerMap("alleleB"))))
+                         Allele.create(values(headerMap("alleleB"))))
       val start = values(headerMap("position")).toLong
       val end = alleles.head.length() + start - 1
       val rsid = values(headerMap("rsid"))
@@ -96,7 +111,8 @@ object SnptestToVcf extends ToolCommand[Args] {
         .noGenotypes()
 
       val infoBuilder = infoKeys.foldLeft(builder) {
-        case (a, b) => a.attribute("ST_" + b, values(headerMap(b)).replaceAll(";", ","))
+        case (a, b) =>
+          a.attribute("ST_" + b, values(headerMap(b)).replaceAll(";", ","))
       }
 
       writer.add(infoBuilder.id(rsid.replaceAll(";", ",")).make())
