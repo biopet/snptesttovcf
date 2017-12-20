@@ -126,4 +126,22 @@ object SnptestToVcf extends ToolCommand[Args] {
     writer.close()
 
   }
+
+  def descriptionText: String =
+    """
+      |Converts a SNPTEST file to VCF.
+    """.stripMargin
+
+  def manualText: String =
+    """
+      |
+      |This tool converts a SNPTEST file to VCF using a reference fasta.
+      |It needs the contig of the impute file.
+    """.stripMargin
+
+  def exampleText: String =
+    s"""
+       |${example("-i", "snptestOutputFile",
+    "-o", "output.vcf", "-R", "reference.fasta", "-c", "contigofimputfile")}
+     """.stripMargin
 }
