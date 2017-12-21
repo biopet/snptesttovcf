@@ -7,6 +7,21 @@ import org.testng.annotations.Test
 
 class SnptestToVcfTest extends ToolTest[Args] {
   def toolCommand: SnptestToVcf.type = SnptestToVcf
+
+
+  /**
+    * Given the simplicity of the tool. Override the min description length.
+    * @return minimum amount of description words.
+    */
+  override def minDescriptionWords = 5
+
+  /**
+    * Given the simplicity of the tool. Override the min manual length.
+    * @return minimum amount of manual words.
+    */
+  override def minManualWords: Int = 20
+
+
   @Test
   def testNoArgs(): Unit = {
     intercept[IllegalArgumentException] {

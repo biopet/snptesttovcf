@@ -157,11 +157,12 @@ object SnptestToVcf extends ToolCommand[Args] {
     """
       |
       |This tool converts a SNPTEST file to VCF using a reference fasta.
-      |It needs the contig of the impute file.
+      |It also needs the contig of the impute file.
     """.stripMargin
 
   def exampleText: String =
-    s"""
+    s"""In order to convert a SNPTEST file to a VCF file:
+       |
        |${example("-i",
                   "snptestOutputFile",
                   "-o",
