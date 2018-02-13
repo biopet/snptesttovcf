@@ -97,8 +97,7 @@ object SnptestToVcf extends ToolCommand[Args] {
             s"contig '${cmdArgs.contig}' not found on reference")
 
     val vcfHeader = new VCFHeader(metaLines)
-    vcfHeader.setSequenceDictionary(
-      fasta.getCachedDict(cmdArgs.referenceFasta))
+    vcfHeader.setSequenceDictionary(fasta.getCachedDict(cmdArgs.referenceFasta))
     val writer = new AsyncVariantContextWriter(
       new VariantContextWriterBuilder()
         .setOutputFile(cmdArgs.outputVcf)
